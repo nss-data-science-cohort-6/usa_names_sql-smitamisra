@@ -71,10 +71,22 @@ WHERE year BETWEEN 2000 AND 2009
 GROUP BY name, gender
 ORDER BY decade2000_name DESC;
 
--- SELECT ‘total_name’ = SUM(num_registered), name, gender
--- FROM names
--- WHERE year BETWEEN 2000 AND 2009 
--- AND gender ='M' OR gender = 'F'
--- GROUP BY name 
--- ORDER BY  ‘total_name’ DESC;
+--Jacob and Emily are the most popular male and female names respectively for the years 2000-2009.
 
+
+--10. Which year had the most variety in names (i.e. had the most distinct names)?
+
+SELECT year, COUNT(DISTINCT name) as dist_name_year
+FROM names
+GROUP BY year
+ORDER BY dist_name_year DESC;
+--year 2008 had the most variety in names 32518 distinct names.
+
+--11. What is the most popular name for a girl that starts with the letter X?
+SELECT name, SUM (num_registered) as most_x
+FROM names
+WHERE name LIKE 'X%' AND gender = 'F'
+GROUP BY name
+ORDER BY most_x DESC;
+
+--"Ximena" is the most popular name starts with X for females.
