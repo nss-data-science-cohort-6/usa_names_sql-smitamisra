@@ -90,3 +90,71 @@ GROUP BY name
 ORDER BY most_x DESC;
 
 --"Ximena" is the most popular name starts with X for females.
+
+--12. How many distinct names appear that start with a 'Q', but whose second letter is not 'u'?
+SELECT name, SUM (num_registered) as most_q
+FROM names
+WHERE name Like 'Q%' AND name NOT LIKE '_u%'
+GROUP BY name
+ORDER BY most_q DESC;
+
+--46
+
+SELECT COUNT(DISTINCT name) AS count_q
+FROM names
+WHERE name Like 'Q%' AND name NOT LIKE '_u%';
+
+--46 names
+--this is fusing the regex with SQL
+SELECT name, SUM (num_registered) AS most_q
+FROM names
+WHERE name SIMILAR TO 'Q[^u]%'
+GROUP BY name
+ORDER BY most_q DESC;
+
+--output is 46
+--13. Which is the more popular spelling between "Stephen" and "Steven"? Use a single query to answer this question.
+
+SELECT name, SUM (num_registered) AS count_ste
+FROM names
+WHERE name LIKE 'Stephen' OR name LIKE 'Steven'
+GROUP BY name
+ORDER BY count_ste DESC;
+--"Steven" is more preferd it occurs 1286951 times and Stephen is 860972.
+
+--14. What percentage of names are "unisex" - that is what percentage of names have been used both for boys and for girls?
+SELECT 
+(SELECT COUNT(DISTINCT name)
+ FROM names
+ WHERE gender='F'
+  AND name IN (SELECT DISTINCT name
+     FROM names
+     WHERE gender='M')) * 100/
+   CAST( COUNT(DISTINCT name) AS DOUBLE PRECISION)AS perc_unisex
+FROM names
+
+----10.98  % are unisex names.
+
+
+-- SELECT
+--  (SELECT COUNT(*)
+--    FROM (SELECT name
+--    FROM names
+--    GROUP BY name
+--    HAVING COUNT(DISTINCT gender ) = 2) AS sub) /
+--    CAST( COUNT(DISTINCT name) AS DOUBLE PRECISION)AS perc_unisex
+-- FROM names
+
+------
+-- SELECT 
+--  (SELECT COUNT(DISTINCT name)
+--  FROM names
+--  WHERE gender='F'
+--   AND name IN (SELECT DISTINCT name
+--      FROM names
+--      WHERE gender='M')) /
+--  CAST( COUNT(DISTINCT name) AS DOUBLE PRECISION) AS perc_unisex
+-- FROM names
+
+
+
