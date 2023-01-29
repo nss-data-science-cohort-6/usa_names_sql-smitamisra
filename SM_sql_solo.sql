@@ -134,27 +134,25 @@ SELECT
 FROM names
 
 ----10.98  % are unisex names.
+--Q15. How many names have made an appearance in every single year since 1880?
+SELECT name, 
+       COUNT(DISTINCT names.name) AS name_count
+  FROM names
+ WHERE year BETWEEN 1880 AND 2018
+ GROUP BY  names.name
+HAVING COUNT(names.year) = 139;
+-- ORDER BY name_count DESC;
+--There are 136 names that have occured every year in the table.
+--Q16. How many names have only appeared in one year?
+SELECT name, 
+	COUNT(DISTINCT names.name) AS name_oneyearonly
+  FROM names
+ WHERE year BETWEEN 1880 AND 2018
+ GROUP BY  names.name
+HAVING COUNT(DISTINCT names.year) = 1;
 
+--tHERE ARE 21123 NAMES that only appear once. Looks a little too much need to revis the code
 
--- SELECT
---  (SELECT COUNT(*)
---    FROM (SELECT name
---    FROM names
---    GROUP BY name
---    HAVING COUNT(DISTINCT gender ) = 2) AS sub) /
---    CAST( COUNT(DISTINCT name) AS DOUBLE PRECISION)AS perc_unisex
--- FROM names
-
-------
--- SELECT 
---  (SELECT COUNT(DISTINCT name)
---  FROM names
---  WHERE gender='F'
---   AND name IN (SELECT DISTINCT name
---      FROM names
---      WHERE gender='M')) /
---  CAST( COUNT(DISTINCT name) AS DOUBLE PRECISION) AS perc_unisex
--- FROM names
 
 
 
